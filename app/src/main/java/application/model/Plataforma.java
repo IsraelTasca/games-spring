@@ -2,13 +2,13 @@ package application.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persitence.Column;
-import jakarta.persitence.Entity;
-import jakarta.persitence.GeneratedValue;
-import jakarta.persitence.GerantionType;
-import jakarta.persitence.Id;
-import jakarta.persitence.OneToMany;
-import jakarta.persitence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GerantionType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table (name = "plataformas")

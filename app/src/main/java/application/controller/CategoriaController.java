@@ -47,7 +47,7 @@ public class CategoriaController {
         Optional<Categoria> categoria = categoriaRepo.findyById(id);
         
         if(categoria.isPresent()) {
-            ui.addAttribute("categoria", categoria.get())
+            ui.addAttribute("categoria", categoria.get());
             return "categoria/update";
         }
 
@@ -62,7 +62,7 @@ public class CategoriaController {
         Optional<Categoria>  categoria = categoriaRepo.findById(id);
         
         if(categoria.isPresent()) {
-            categoria.get(.setNome(nome));
+            categoria.get(setNome(nome));
 
             categoriaRepo.save(categoria.get());
         }
