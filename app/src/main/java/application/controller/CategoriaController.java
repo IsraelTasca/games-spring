@@ -26,7 +26,7 @@ public class CategoriaController {
 
     @RequestMapping("/insert")
     public String insert() {
-        return "categoria/inset";
+        return "categoria/insert";
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
