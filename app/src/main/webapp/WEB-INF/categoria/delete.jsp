@@ -7,7 +7,6 @@
         <title>Remover Categoria</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     </head>
-
     <body>
         <div class="container">
             <h1>Remover Categoria</h1>
