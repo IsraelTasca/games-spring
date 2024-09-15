@@ -26,13 +26,13 @@ public class CategoriaController {
 
     @RequestMapping("/insert")
     public String insert() {
-        return "categoria/list";
+        return "categoria/inset";
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public String insert(@RequestParam("nome") String nome) {
         Categoria categoria = new Categoria();
-        categoria.SetNome(nome);
+        categoria.setNome(nome);
 
         categoriaRepo.save(categoria);
 
@@ -42,9 +42,9 @@ public class CategoriaController {
     @RequestMapping("/update")
     public String update(
         @RequestParam("id") long id,
-        model ui) {
+        Model ui) {
         
-        Optional<Categoria> categoria = categoriaRepo.findyById(id);
+        Optional<Categoria> categoria = categoriaRepo.findById(id);
         
         if(categoria.isPresent()) {
             ui.addAttribute("categoria", categoria.get());
@@ -62,7 +62,7 @@ public class CategoriaController {
         Optional<Categoria>  categoria = categoriaRepo.findById(id);
         
         if(categoria.isPresent()) {
-            categoria.get(setNome(nome));
+            categoria.get().setNome(nome);
 
             categoriaRepo.save(categoria.get());
         }
@@ -73,7 +73,7 @@ public class CategoriaController {
     @RequestMapping("/delete")
     public String delete(
         @RequestParam("id") long id,
-        model ui) {
+        Model ui) {
 
         Optional<Categoria> categoria = categoriaRepo.findById(id);
         

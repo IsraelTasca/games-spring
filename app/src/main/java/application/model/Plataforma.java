@@ -5,19 +5,22 @@ import java.util.Set;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GerantionType;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table (name = "plataformas")
 public class Plataforma{
     @Id
-    @GeneratedValue(strategy = GerantionType.IDENTIFY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column (unique = true, nullabel = false)
+    @Column (unique = true, nullable = false)
     private String nome;
+
+    @ManyToMany(mappedBy = "plataformas")
+    private Set<Jogo> jogos = new HashSet<>();
 
     public void setId(long id) {
         this.id = id;

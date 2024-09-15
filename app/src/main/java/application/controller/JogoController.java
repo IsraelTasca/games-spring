@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import springframework.stereotype.Controller;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,7 +48,7 @@ public class JogoController {
 
         Jogo jogo = new Jogo();
         jogo.setTitulo (titulo);
-        jogo.setCategoria (categoriaRepo.findById(idCategoria).get()); 
+        jogo.setCategoria(categoriaRepo.findById(idCategoria).get()); 
         for(long p : idsPlataformas) {
             Optional<Plataforma> plataforma = plataformaRepo.findById(p);
             if (plataforma.isPresent()) {
@@ -84,7 +84,7 @@ public class JogoController {
 
         if (jogo.isPresent()) {
             jogo.get().setTitulo (titulo);
-            jogo.get().setCategoria (categoriaRepo, findById(idCategoria).get());
+            jogo.get().setCategoria(categoriaRepo.findById(idCategoria).get());
             Set<Plataforma> updatePlataforma = new HashSet<>();
             for(long p : idsPlataformas) {
                 Optional<Plataforma> plataforma = plataformaRepo.findById(p);
@@ -99,7 +99,7 @@ public class JogoController {
     }    
 
     @RequestMapping("/delete")
-    public string delete( 
+    public String delete( 
         @RequestParam("id") long id, 
         Model ui) {
 
