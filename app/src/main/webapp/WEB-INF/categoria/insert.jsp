@@ -3,7 +3,7 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8" />
-        <title>Categorias</title>
+        <title>Nova Categoria</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body
@@ -16,7 +16,7 @@
                 </div>
                 <br />
                 <a href="/categoria/list" class="btn btn-primary" >Voltar</a>
-                <button type="submit" class="btn btn-sucess">Salvar</button>
+                <button type="submit" class="btn btn-success">Salvar</button>
             </form>
         </div>
     </body>
