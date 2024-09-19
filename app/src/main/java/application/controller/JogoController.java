@@ -22,22 +22,24 @@ import application.repository.PlataformaRepository;
 public class JogoController {
     @Autowired
     private JogoRepository jogoRepo;
+
     @Autowired
     private CategoriaRepository categoriaRepo;
+
     @Autowired
     private PlataformaRepository plataformaRepo;
 
     @RequestMapping("/list")
-    public String list (Model ui) {
-        ui.addAttribute("jogos", jogoRepo.findAll());
-        return "jogo/list";
+    public String list(Model model) {
+        model.addAttribute("jogos", jogoRepo.findAll());
+        return "jogo/list"; // Verifique se o arquivo está em src/main/resources/templates/jogo/list.html
     }
 
     @RequestMapping("/insert")
-    public String insert (Model ui) {
-        ui.addAttribute("categorias", categoriaRepo.findAll()); 
-        ui.addAttribute("plataformas", plataformaRepo.findAll());
-        return "jogo/insert";
+    public String insert(Model model) {
+        model.addAttribute("categorias", categoriaRepo.findAll());
+        model.addAttribute("plataformas", plataformaRepo.findAll());
+        return "jogo/insert"; // Verifique se o arquivo está em src/main/resources/templates/jogo/insert.html
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
@@ -47,30 +49,30 @@ public class JogoController {
         @RequestParam("plataformas") long[] idsPlataformas) {
 
         Jogo jogo = new Jogo();
-        jogo.setTitulo (titulo);
-        jogo.setCategoria(categoriaRepo.findById(idCategoria).get()); 
-        for(long p : idsPlataformas) {
-            Optional<Plataforma> plataforma = plataformaRepo.findById(p);
-            if (plataforma.isPresent()) {
-                jogo.getPlataformas().add(plataforma.get());
-            }
+        jogo.setTitulo(titulo);
+        
+        // Verificar se a categoria existe
+        categoriaRepo.findById(idCategoria).ifPresent(jogo::setCategoria);
+
+        Set<Plataforma> plataformas = new HashSet<>();
+        for (long p : idsPlataformas) {
+            plataformaRepo.findById(p).ifPresent(plataformas::add);
         }
+        jogo.setPlataformas(plataformas);
         jogoRepo.save(jogo);
         return "redirect:/jogo/list";
     }
 
-    @RequestMapping("/update") 
-    public String update(
-        @RequestParam("id") long id,
-        Model ui) {
-
+    @RequestMapping("/update")
+    public String update(@RequestParam("id") long id, Model model) {
         Optional<Jogo> jogo = jogoRepo.findById(id);
-        if(jogo.isPresent()) {
-            ui.addAttribute("jogo", jogo.get());
-            ui.addAttribute("categorias", categoriaRepo.findAll());
-            ui.addAttribute("plataformas", plataformaRepo.findAll()); return "jogo/update";
+        if (jogo.isPresent()) {
+            model.addAttribute("jogo", jogo.get());
+            model.addAttribute("categorias", categoriaRepo.findAll());
+            model.addAttribute("plataformas", plataformaRepo.findAll());
+            return "jogo/update"; // Verifique se o arquivo está em src/main/resources/templates/jogo/update.html
         }
-        return "redirect:/jogo/list";
+        return "redirect:/jogo/list"; // Redireciona se o jogo não for encontrado
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
@@ -81,42 +83,34 @@ public class JogoController {
         @RequestParam("plataformas") long[] idsPlataformas) {
 
         Optional<Jogo> jogo = jogoRepo.findById(id);
-
         if (jogo.isPresent()) {
-            jogo.get().setTitulo (titulo);
-            jogo.get().setCategoria(categoriaRepo.findById(idCategoria).get());
-            Set<Plataforma> updatePlataforma = new HashSet<>();
-            for(long p : idsPlataformas) {
-                Optional<Plataforma> plataforma = plataformaRepo.findById(p);
-                if(plataforma.isPresent()) {
-                    updatePlataforma.add(plataforma.get());
-                }
-            }            
-            jogo.get().setPlataformas(updatePlataforma);
-            jogoRepo.save(jogo.get());
+            Jogo jogoAtual = jogo.get();
+            jogoAtual.setTitulo(titulo);
+            categoriaRepo.findById(idCategoria).ifPresent(jogoAtual::setCategoria);
+
+            Set<Plataforma> plataformas = new HashSet<>();
+            for (long p : idsPlataformas) {
+                plataformaRepo.findById(p).ifPresent(plataformas::add);
+            }
+            jogoAtual.setPlataformas(plataformas);
+            jogoRepo.save(jogoAtual);
         }
         return "redirect:/jogo/list";
-    }    
+    }
 
     @RequestMapping("/delete")
-    public String delete( 
-        @RequestParam("id") long id, 
-        Model ui) {
-
+    public String delete(@RequestParam("id") long id, Model model) {
         Optional<Jogo> jogo = jogoRepo.findById(id);
-
         if (jogo.isPresent()) {
-             ui.addAttribute("jogo", jogo.get()); 
-             return "jogo/delete";
+            model.addAttribute("jogo", jogo.get());
+            return "jogo/delete"; // Verifique se o arquivo está em src/main/resources/templates/jogo/delete.html
         }
-
-        return "redirect:/jogo/list";
-    }    
+        return "redirect:/jogo/list"; // Redireciona se o jogo não for encontrado
+    }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String delete(@RequestParam("id") long id) {
-         jogoRepo.deleteById(id);
-
+        jogoRepo.deleteById(id);
         return "redirect:/jogo/list";
-    }    
-}    
+    }
+}

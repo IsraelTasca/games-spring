@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import application.model.Plataforma;
-import application.repository. PlataformaRepository;
+import application.repository.PlataformaRepository;
 
 @Controller
 @RequestMapping("/plataforma")
@@ -19,39 +19,33 @@ public class PlataformaController {
     private PlataformaRepository plataformaRepo;
 
     @RequestMapping("/list")
-    public String list (Model ui) {
-        ui.addAttribute("plataformas", plataformaRepo.findAll()); 
-        return "plataforma/list";
+    public String list(Model ui) {
+        ui.addAttribute("plataformas", plataformaRepo.findAll());
+        return "plataforma/list"; // Verifique se o arquivo está em src/main/resources/templates/plataforma/list.html
     }
 
     @RequestMapping("/insert")
-    public String insert() { 
-        return "plataforma/insert"; 
+    public String insert() {
+        return "plataforma/insert"; // Verifique se o arquivo está em src/main/resources/templates/plataforma/insert.html
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public String insert (@RequestParam("nome") String nome) {
+    public String insert(@RequestParam("nome") String nome) {
         Plataforma plataforma = new Plataforma();
-        plataforma.setNome (nome);
-
+        plataforma.setNome(nome);
         plataformaRepo.save(plataforma);
         return "redirect:/plataforma/list";
-    }    
+    }
 
     @RequestMapping("/update")
-    public String update( 
-        @RequestParam("id") long id, 
-        Model ui) {
-
+    public String update(@RequestParam("id") long id, Model ui) {
         Optional<Plataforma> plataforma = plataformaRepo.findById(id);
-
-        if(plataforma.isPresent()) { 
-            ui.addAttribute("plataforma", plataforma.get()); 
-            return "plataforma/update"; 
+        if (plataforma.isPresent()) {
+            ui.addAttribute("plataforma", plataforma.get());
+            return "plataforma/update"; // Verifique se o arquivo está em src/main/resources/templates/plataforma/update.html
         }
-
-        return "redirect:/plataforma/list";
-    }   
+        return "redirect:/plataforma/list"; // Redireciona se não encontrar a plataforma
+    }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(
@@ -59,35 +53,26 @@ public class PlataformaController {
         @RequestParam("nome") String nome) {
 
         Optional<Plataforma> plataforma = plataformaRepo.findById(id);
-
         if (plataforma.isPresent()) {
-            plataforma.get().setNome (nome);
-
+            plataforma.get().setNome(nome);
             plataformaRepo.save(plataforma.get());
         }
-
         return "redirect:/plataforma/list";
     }
 
     @RequestMapping("/delete")
-    public String delete( 
-        @RequestParam("id") long id, 
-        Model ui) {
-
+    public String delete(@RequestParam("id") long id, Model ui) {
         Optional<Plataforma> plataforma = plataformaRepo.findById(id);
-
         if (plataforma.isPresent()) {
-            ui.addAttribute("plataforma", plataforma.get()); 
-            return "plataforma/delete";
+            ui.addAttribute("plataforma", plataforma.get());
+            return "plataforma/delete"; // Verifique se o arquivo está em src/main/resources/templates/plataforma/delete.html
         }
-
-        return "redirect:/plataforma/list";
-    }   
+        return "redirect:/plataforma/list"; // Redireciona se não encontrar a plataforma
+    }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String delete(@RequestParam("id") long id) { 
+    public String delete(@RequestParam("id") long id) {
         plataformaRepo.deleteById(id);
-
         return "redirect:/plataforma/list";
     }
-}    
+}

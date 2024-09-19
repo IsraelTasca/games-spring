@@ -19,80 +19,58 @@ public class CategoriaController {
     private CategoriaRepository categoriaRepo;
 
     @RequestMapping("/list")
-    public String list(Model ui) {
-        ui.addAttribute("Categorias", categoriaRepo.findAll());
-        return "categoria/list";
+    public String list(Model model) {
+        model.addAttribute("categorias", categoriaRepo.findAll());
+        return "categoria/list"; // Verifique se o arquivo está em src/main/resources/templates/categoria/list.html
     }
 
     @RequestMapping("/insert")
     public String insert() {
-        return "categoria/insert";
+        return "categoria/insert"; // Verifique se o arquivo está em src/main/resources/templates/categoria/insert.html
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public String insert(@RequestParam("nome") String nome) {
         Categoria categoria = new Categoria();
         categoria.setNome(nome);
-
         categoriaRepo.save(categoria);
-
         return "redirect:/categoria/list";
     }
 
     @RequestMapping("/update")
-    public String update(
-        @RequestParam("id") long id,
-        Model ui) {
-        
+    public String update(@RequestParam("id") long id, Model model) {
         Optional<Categoria> categoria = categoriaRepo.findById(id);
-        
-        if(categoria.isPresent()) {
-            ui.addAttribute("categoria", categoria.get());
-            return "categoria/update";
+        if (categoria.isPresent()) {
+            model.addAttribute("categoria", categoria.get());
+            return "categoria/update"; // Verifique se o arquivo está em src/main/resources/templates/categoria/update.html
         }
-
-        return "redirect:/categoria/list";
+        // Redireciona se não encontrar a categoria
+        return "redirect:/categoria/list"; 
     }
-    
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(
-        @RequestParam("id") long id,
-        @RequestParam("nome") String nome ) {
-        
-        Optional<Categoria>  categoria = categoriaRepo.findById(id);
-        
-        if(categoria.isPresent()) {
-            categoria.get().setNome(nome);
 
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String update(@RequestParam("id") long id, @RequestParam("nome") String nome) {
+        Optional<Categoria> categoria = categoriaRepo.findById(id);
+        if (categoria.isPresent()) {
+            categoria.get().setNome(nome);
             categoriaRepo.save(categoria.get());
         }
         return "redirect:/categoria/list";
-
     }
 
     @RequestMapping("/delete")
-    public String delete(
-        @RequestParam("id") long id,
-        Model ui) {
-
+    public String delete(@RequestParam("id") long id, Model model) {
         Optional<Categoria> categoria = categoriaRepo.findById(id);
-        
-        if(categoria.isPresent()) {
-            ui.addAttribute("categoria", categoria.get());
-            return "categoria/delete";
+        if (categoria.isPresent()) {
+            model.addAttribute("categoria", categoria.get());
+            return "categoria/delete"; // Verifique se o arquivo está em src/main/resources/templates/categoria/delete.html
         }
-
-        return "redirect:/categoria/list";
-
+        return "redirect:/categoria/list"; // Redirecionar se não encontrar
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String delete(@RequestParam("id") long id) {
         categoriaRepo.deleteById(id);
-
         return "redirect:/categoria/list";
     }
-    
 }
-
-
